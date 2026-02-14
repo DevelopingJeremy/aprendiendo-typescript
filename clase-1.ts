@@ -28,7 +28,7 @@ function saludar3 ({nombre, edad}: {nombre: string, edad: number}): string {
 // fn: (name: string) => void
 // Esto significa que fn es una funcion que recibe un string y no retorna nada (void), o mas bien que no nos
 // importa lo que retorne
-const sayHiFromFunction = (fn: (name: string) => void) => {
+const sayHiFromFunction = (fn: (name: string) => void) => { // todo: revisar esto
     fn('Jeremy')
 }
 
@@ -73,11 +73,14 @@ const thor = crearHeroe('Thor', 1500);
 
 //* Type Alias
 
+// Template Union Types
+type HeroId = `${string}-${string}-${string}-${string}-${string}` // Vamos a crear un tipo de dato con formato para UUID
+// Podemos crear cualquier tipo nos guste, asi que es muy util para crear tipos de datos personalizados y reutilizables
 
 // Creamos un tipo para un objeto
 // Esto nos ayuda a reutilizar ese tipo de objeto varias veces y saber que pertenece a la misma estructura
 type Hero = {
-    readonly id?: number, // con readonly decimos que solo se puede leer y no se puede modificar
+    readonly id?: HeroId, // con readonly decimos que solo se puede leer y no se puede modificar
     nombre: string,
     edad: number,
     activo?: boolean // con el ? antes de los : decimos que es opcional
@@ -93,14 +96,28 @@ let heroe2: Hero = {
 // Creamos el objeto con los parametros de tipo Hero, y devolemos un tipo Hero
 // (Este nos ayuda a comprender el como funciona el tipo y las funciones)
 function createHero (hero: Hero): Hero {
+    const id = crypto.randomUUID(); // Esto es un metodo de JS para crear un UUID
     const { nombre, edad } = hero;
     const activo = true;
-    return { id: 200 ,nombre, edad, activo }
+    return { id, nombre, edad, activo }
 }
 
 const thor2 = createHero({ nombre: 'Thorcito', edad: 200})
+
+// Object.freeze hace que el objeto sea inmutable, es decir, no se pueden modificar sus propiedades (Propio de JS no de TS)
+const thor3 = Object.freeze(createHero({ nombre: 'Thorcito', edad: 200}))
 
 
 // con el ? decimos que si realmente lo tiene, haga esa funcion
 thor2.id?.toString()
 
+
+//* Template Union Types
+
+// Imaginemos que guardamos colores, pero no sabemos si lleva # o no.
+
+
+type ColorHexadecimal = `#${string}`; // Esto es un tipo de dato que solo acepta strings que empiecen con #, y el resto puede ser cualquier string
+
+const color1: ColorHexadecimal = '#ff0000'; // Esto es valido
+// const color2: ColorHexadecimal = 'ff0000'; // Esto no es valido porque no empieza con #, nos va a tirar error
