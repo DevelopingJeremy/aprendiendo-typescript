@@ -35,7 +35,7 @@ function saludar3 ({nombre, edad}: {nombre: string, edad: number}): string {
 // fn: (name: string) => void
 // Esto significa que fn es una funcion que recibe un string y no retorna nada (void), o mas bien que no nos
 // importa lo que retorne
-const sayHiFromFunction = (fn: (name: string) => void) => { // todo: revisar esto
+const sayHiFromFunction = (fn: (name: string) => void) => { // todo: revisar esto para comprenderlo mejor
     fn('Jeremy')
 }
 
@@ -235,4 +235,101 @@ type HeroWithPower = Hero & { power: string }; // Esto es un tipo de dato que co
 type HeroFinal = Hero & History & { power: string }
 
 //* Type indexing
+// Nos sirve para utilizar solo algunas partes de un tipo, por ejemplo, solo el nombre de un heroe
 
+type HeroProperties = {
+    isActive: boolean,
+    address: {
+        planet: string,
+        city: string
+    }
+}
+
+const addressHero: HeroProperties['address'] = {
+    planet: 'Tierra',
+    city: 'New York'
+}
+
+//* Type from value
+// Nos sirve para crear un tipo a partir de un valor, por ejemplo, a partir de un objeto
+type address = typeof addressHero
+
+
+//* Type from function return
+function createAddress () {
+    return {
+        planet: 'Tierra',
+        city: 'New York'
+    }
+}
+
+// Esto es un tipo de dato que se basa en el valor de retorno de la funcion createAddress
+
+// El ReturnTpe es un tipo utilitario (Utily Type) que nos permite obtener el tipo de retorno de una funcion
+type AddressFromFunction = ReturnType<typeof createAddress>
+
+
+//* Utility Types
+// Los Utility Types son tipos de datos que nos ayudan a modificar otros tipos de datos, por ejemplo, para hacer que todas las propiedades de un tipo sean opcionales
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//* Arrays
+const languages: string[] = []
+
+languages.push('TypeScript')
+
+
+const languages2: Array<string> = [] // Esto es lo mismo que el anterior, pero con una sintaxis diferente
+
+const languages3: (string | number)[] = [] // Esto es un array que puede contener tanto strings como numeros
+
+languages3.push('TypeScript')
+languages3.push(123)
+
+
+
+// Vamos a hacer un array de arrays, ejemplo el gato
+
+/*
+[
+    ['X', 'X', 'O'], // <- STRING
+    ['O', 'O', 'X'], // <- STRING
+    ['X', 'O', 'O']  // <- STRING
+]
+*/
+
+const gameBoard: string[][] = [] // Esto es un array de arrays de strings
+// Pero esta mal porque se puede poner lo que queramos en los campos
+
+type Cell = 'X' | 'O' | '' // Esto es un tipo de dato que solo acepta los valores 'X', 'O' o '', asi que no se pueden poner otros valores
+
+const gameBoard2: Cell[][] = [] // Esto es un array de arrays de Cell, asi que solo se pueden poner los valores 'X', 'O' o '' en los campos
+
+
+// Ahora con esto evitamos que sea diferente a un 3x3
+type GameBoard = [ // Esto es una tupla (Tiene un numero fijo de elementos) de arrays de Cell
+    [Cell, Cell, Cell],
+    [Cell, Cell, Cell],
+    [Cell, Cell, Cell]
+]
+
+const gameBoard3: GameBoard = [
+    ['X', 'X', 'O'],
+    ['O', 'O', 'X'],
+    ['X', 'O', 'O']
+]
+
+// Otro ejemplo
+const RGB: [number, number, number] = [255, 0, 0]
